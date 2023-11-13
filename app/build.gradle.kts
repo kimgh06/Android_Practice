@@ -1,12 +1,16 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.example.real_jook"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding= true
+    }
     defaultConfig {
         applicationId = "com.example.real_jook"
         minSdk = 24
@@ -40,7 +44,7 @@ dependencies {
 
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6    .1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
