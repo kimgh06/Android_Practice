@@ -2,20 +2,16 @@ package com.example.real_jook
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.net.HttpURLConnection
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import org.json.JSONArray
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
-
+import kotlin.math.*
 
 class MainActivity : AppCompatActivity() {
     private val apiKey = "9aa3bd11f23949c78169"
@@ -99,15 +95,25 @@ class MainActivity : AppCompatActivity() {
     }
     private fun makeTextView(job:JSONObject){
         val linearLayout = findViewById<LinearLayout>(R.id.contentBox)
-        val textView = TextView(this)
-        var text = job["MAKER_NAME"].toString()+" "+job["DESC_KOR"].toString()+" "+job["NUTR_CONT1"].toString()+"kcal "+job["SERVING_SIZE"].toString()+job["SERVING_UNIT"] +
-        "\n\t\t\t\t\t\t탄수화물 "+job["NUTR_CONT2"].toString() +
-        "\n\t\t\t\t\t\t단백질 "+job["NUTR_CONT3"].toString()+
-        "\n\t\t\t\t\t\t지방 "+job["NUTR_CONT4"].toString()+
-        "\n\t\t\t\t\t\t당류 "+job["NUTR_CONT5"].toString()+
-        "\n\t\t\t\t\t\t나트륨 "+job["NUTR_CONT6"].toString()
+        if (job.optString("NUTR_CONT1").length>0&&job.optString("NUTR_CONT2").length>0&&job.optString("NUTR_CONT3").length>0) {
+            val textView = TextView(this)
+            val gram = job.optDouble("SERVING_SIZE", 0.0)
+            val proteinByHundred = Math.floor(job.optDouble("NUTR_CONT3", 0.0) / (gram / (if (gram>=100) 100 else 1))*100)/100
 
-        textView.text = text
-        linearLayout.addView(textView)
+            val text = """
+            ${job.optString("MAKER_NAME")} ${job.optString("DESC_KOR")} ${job.optString("NUTR_CONT1")}kcal
+                    총량 ${gram}${job.optString("SERVING_UNIT")}
+                    탄수화물 ${job.optString("NUTR_CONT2")}g
+                    단백질 ${job.optString("NUTR_CONT3")}g
+                            100g당 단백질 ${proteinByHundred}g
+                    지방 ${job.optString("NUTR_CONT4")}g
+                    당류 ${job.optString("NUTR_CONT5")}g
+                    나트륨 ${job.optString("NUTR_CONT6")}mg
+            
+        """.trimIndent()
+
+            textView.text = text
+            linearLayout.addView(textView)
+        }
     }
 }
