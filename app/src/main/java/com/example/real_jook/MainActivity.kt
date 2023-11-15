@@ -100,7 +100,14 @@ class MainActivity : AppCompatActivity() {
     private fun makeTextView(job:JSONObject){
         val linearLayout = findViewById<LinearLayout>(R.id.contentBox)
         val textView = TextView(this)
-        textView.text = job["MAKER_NAME"].toString()+" "+job["DESC_KOR"].toString()+" "+job["NUTR_CONT1"].toString()+"kcal "+job["SERVING_SIZE"].toString()+job["SERVING_UNIT"].toString()
+        var text = job["MAKER_NAME"].toString()+" "+job["DESC_KOR"].toString()+" "+job["NUTR_CONT1"].toString()+"kcal "+job["SERVING_SIZE"].toString()+job["SERVING_UNIT"] +
+        "\n\t\t\t\t\t\t탄수화물 "+job["NUTR_CONT2"].toString() +
+        "\n\t\t\t\t\t\t단백질 "+job["NUTR_CONT3"].toString()+
+        "\n\t\t\t\t\t\t지방 "+job["NUTR_CONT4"].toString()+
+        "\n\t\t\t\t\t\t당류 "+job["NUTR_CONT5"].toString()+
+        "\n\t\t\t\t\t\t나트륨 "+job["NUTR_CONT6"].toString()
+
+        textView.text = text
         linearLayout.addView(textView)
     }
 }
